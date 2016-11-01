@@ -144,6 +144,7 @@
 			"group": "Video",
 			"api": "/apis/videos",
 			"method": "POST",
+			"requireToken": true,
 			"params": {
 				"body": {
 					"name": {
@@ -267,6 +268,7 @@
 			"group": "Video",
 			"api": "/apis/video/:id",
 			"method": "PUT",
+			"requireToken": true,
 			"params": {
 				"url": {
 					"id": {
@@ -324,6 +326,7 @@
 			"group": "Video",
 			"api": "/apis/video/:id",
 			"method": "DELETE",
+			"requireToken": true,
 			"params": {
 				"url": {
 					"id": {

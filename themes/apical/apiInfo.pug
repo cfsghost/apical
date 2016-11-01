@@ -137,7 +137,10 @@ mixin apiInfo(hash, api)
 		a(name=hash)
 			h2.ui.header #{api.name}
 
-		div.content #{api.desc}
+				- if (api.requireToken)
+					div.ui.left.pointing.red.basic.label Access token is required
+
+		div.article-content #{api.desc}
 		div.ui.inverted.segment
 			div.ui.horizontal.label(
 				class={green: api.method == 'GET'},
