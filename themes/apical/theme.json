@@ -1,0 +1,7 @@
+{
+	"name": "apical",
+	"desc": "default theme provided by Apical",
+	"engine": "pug",
+	"entry": "index.pug",
+	"assets": "./assets"
+}

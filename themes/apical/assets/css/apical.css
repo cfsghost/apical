@@ -1,0 +1,14 @@
+.article-content {
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+code {
+	display: block;
+	background: #555555;
+	color: white;
+	border-radius: 5px;
+	padding: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

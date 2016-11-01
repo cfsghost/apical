@@ -1,0 +1,153 @@
+
+mixin showField(key, type, desc)
+	tr
+		td #{key}
+		td #{type}
+		td #{desc}
+
+mixin field(key, format)
+
+	- if (format.type == "Array" && format.item)
+		+showField(key, format.item.type + '[]', format.desc)
+
+		tr
+			td(colspan='3')
+				table.ui.table
+					- for (var field in format.item.format)
+						+field(field, format.item.format[field])
+	- else
+		+showField(key, format.type, format.desc)
+
+mixin urlParams(params)
+	h3.ui.header URL Parameters
+
+	table.ui.blue.selectable.table
+		thead
+			tr
+				th Field 
+				th Type
+				th Description
+		tbody
+			- for (var key in params)
+				tr
+					td #{key}
+					td #{params[key].type}
+					td #{params[key].desc}
+
+mixin queryParams(params)
+	h3.ui.header Query Parameters
+
+	table.ui.blue.selectable.table
+		thead
+			tr
+				th Field 
+				th Type
+				th Default
+				th Description
+		tbody
+			- for (var key in params)
+				tr(class={disabled: !params[key].required})
+					td #{key}
+					td #{params[key].type}
+					td #{params[key].default}
+					td #{params[key].desc}
+
+mixin bodyParams(params)
+	h3.ui.header Body Parameters
+
+	table.ui.blue.selectable.table
+		thead
+			tr
+				th Field 
+				th Type
+				th Default
+				th Description
+		tbody
+			- for (var key in params)
+				tr(class={disabled: !params[key].required})
+					td #{key}
+					td #{params[key].type}
+					td #{params[key].default}
+					td #{params[key].desc}
+
+mixin example(example)
+	h4.ui.header Response Example
+
+	div.ui.inverted.segment
+		pre #{JSON.stringify(example, null, '\t')}
+
+mixin response(event, response)
+	- var format = response.format;
+
+	- if (response.success)
+		div.ui.green.ribbon.label Status Code: #{response.code}
+	- else
+		div.ui.red.ribbon.label Status Code: #{response.code}
+
+	table.ui.selectable.table(class={green: response.success}, class={red: !response.success})
+		thead
+			tr
+				th Field 
+				th Type
+				th Description
+		tbody
+			- for (var key in format)
+				+field(key, format[key])
+
+	+example(response.example)
+
+mixin apiInfo(hash, api)
+
+	div.ui.basic.segment
+
+		a(name=hash)
+			h2.ui.header #{api.name}
+
+		div.content #{api.desc}
+		div.ui.inverted.segment
+			div.ui.horizontal.label(
+				class={green: api.method == 'GET'},
+				class={red: api.method == 'POST'}) #{api.method}
+			| #{api.api}
+
+		- if (api.params)
+			- if (api.params.url)
+				+urlParams(api.params.url)
+			- else if (api.params.query)
+				+queryParams(api.params.query)
+			- else if (api.params.body)
+				+bodyParams(api.params.body)
+
+
+		h3.ui.header Server Response
+		
+		div.ui.top.attached.tabular.menu
+			- var first = true;
+			- for (var event in api.status)
+				- var response = api.status[event];
+				- var id = (api.api + api.method + event).replace(/\//g, '-');
+
+				- if (first)
+					- if (response.success)
+						a.item.green.active(data-tab=id) #{event}
+					- else
+						a.item.red.active(data-tab=id) #{event}
+
+					- first = false;
+				- else
+					- if (response.success)
+						a.green.item(data-tab=id) #{event}
+					- else
+						a.red.item(data-tab=id) #{event}
+
+		- var first = true;
+		- for (var event in api.status)
+			- var response = api.status[event];
+			- var id = (api.api + api.method + event).replace(/\//g, '-');
+			- if (first)
+				div.ui.bottom.attached.tab.segment.active(data-tab=id)
+					+response(event, response)
+				- first = false;
+			- else
+				div.ui.bottom.attached.tab.segment(data-tab=id)
+					+response(event, response)
