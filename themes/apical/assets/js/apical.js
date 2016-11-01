@@ -30,9 +30,9 @@ $(function() {
 			var $obj = $(this).addClass('active');
 
 			var items = $('.ui.accordion.mainmenu .item .title');
-			for (var index in items) {
+			for (var index = 0; index < items.length; index++) {
 				if ($.contains(items[index].parentNode, this)) {
-					$('.ui.accordion.mainmenu').accordion('open', parseInt(index));
+					$('.ui.accordion.mainmenu').accordion('open', index);
 					break;
 				}
 			}

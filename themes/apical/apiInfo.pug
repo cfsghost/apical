@@ -84,17 +84,51 @@ mixin response(event, response)
 	- else
 		div.ui.red.ribbon.label Status Code: #{response.code}
 
-	table.ui.selectable.table(class={green: response.success}, class={red: !response.success})
-		thead
-			tr
-				th Field 
-				th Type
-				th Description
-		tbody
-			- for (var key in format)
-				+field(key, format[key])
+	- if (format && Object.keys(format).length)
+		table.ui.selectable.table(class={green: response.success}, class={red: !response.success})
+			thead
+				tr
+					th Field 
+					th Type
+					th Description
+			tbody
+				- for (var key in format)
+					+field(key, format[key])
 
-	+example(response.example)
+		+example(response.example)
+
+mixin serverResponse(api)
+	
+	div.ui.top.attached.tabular.menu
+		- var first = true;
+		- for (var event in api.status)
+			- var response = api.status[event];
+			- var id = (api.api + api.method + event).replace(/\//g, '-');
+
+			- if (first)
+				- if (response.success)
+					a.item.green.active(data-tab=id) #{event}
+				- else
+					a.item.red.active(data-tab=id) #{event}
+
+				- first = false;
+			- else
+				- if (response.success)
+					a.green.item(data-tab=id) #{event}
+				- else
+					a.red.item(data-tab=id) #{event}
+
+	- var first = true;
+	- for (var event in api.status)
+		- var response = api.status[event];
+		- var id = (api.api + api.method + event).replace(/\//g, '-');
+		- if (first)
+			div.ui.bottom.attached.tab.segment.active(data-tab=id)
+				+response(event, response)
+			- first = false;
+		- else
+			div.ui.bottom.attached.tab.segment(data-tab=id)
+				+response(event, response)
 
 mixin apiInfo(hash, api)
 
@@ -107,47 +141,20 @@ mixin apiInfo(hash, api)
 		div.ui.inverted.segment
 			div.ui.horizontal.label(
 				class={green: api.method == 'GET'},
-				class={red: api.method == 'POST'}) #{api.method}
+				class={yellow: api.method == 'POST'},
+				class={red: api.method == 'DELETE'},
+				class={blue: api.method == 'PUT'}) #{api.method}
 			| #{api.api}
 
 		- if (api.params)
 			- if (api.params.url)
 				+urlParams(api.params.url)
-			- else if (api.params.query)
+			- if (api.params.query)
 				+queryParams(api.params.query)
-			- else if (api.params.body)
+			- if (api.params.body)
 				+bodyParams(api.params.body)
 
 
 		h3.ui.header Server Response
-		
-		div.ui.top.attached.tabular.menu
-			- var first = true;
-			- for (var event in api.status)
-				- var response = api.status[event];
-				- var id = (api.api + api.method + event).replace(/\//g, '-');
 
-				- if (first)
-					- if (response.success)
-						a.item.green.active(data-tab=id) #{event}
-					- else
-						a.item.red.active(data-tab=id) #{event}
-
-					- first = false;
-				- else
-					- if (response.success)
-						a.green.item(data-tab=id) #{event}
-					- else
-						a.red.item(data-tab=id) #{event}
-
-		- var first = true;
-		- for (var event in api.status)
-			- var response = api.status[event];
-			- var id = (api.api + api.method + event).replace(/\//g, '-');
-			- if (first)
-				div.ui.bottom.attached.tab.segment.active(data-tab=id)
-					+response(event, response)
-				- first = false;
-			- else
-				div.ui.bottom.attached.tab.segment(data-tab=id)
-					+response(event, response)
+		+serverResponse(api)

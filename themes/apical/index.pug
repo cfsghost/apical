@@ -6,7 +6,10 @@ mixin listAPIsForMenu(group)
 		- var api = definitions[index];
 		- var id = (api.api + api.method).replace(/\//g, '').replace(/:/g, '-');
 		- if (api.group == group)
-			a.mainmenu.blue.item(href='#' + id, data-tab='group-' + group) #{api.name}
+			a.mainmenu.item(href='#' + id, data-tab='group-' + group) #{api.name}
+
+		- if (!api.group && group == 'General')
+			a.mainmenu.item(href='#' + id, data-tab='group-' + group) #{api.name}
 
 mixin listAPIs(group)
 
@@ -19,13 +22,45 @@ mixin listAPIs(group)
 			- var id = (api.api + api.method).replace(/\//g, '').replace(/:/g, '-');
 			+apiInfo(id, api)
 
+mixin group(group)
+	div.ui.basic.tab.segment(data-tab='group-' + group.name)
+		h1.ui.header #{group.name}
+		div.article-content !{group.desc}
+		+listAPIs(group.name)
+
+		- if (group.name == 'General')
+			+listAPIs(undefined)
+
 mixin listGroups
 	- for (var index in groups)
 		- var group = groups[index];
-		div.ui.basic.tab.segment(data-tab='group-' + group.name)
-			h1.ui.header #{group.name}
-			div.article-content !{group.desc}
-			+listAPIs(group.name)
+		+group(group)
+
+mixin general
+	- var hasNoGroupAPI = false;
+
+	- for (var index in definitions)
+		- var api = definitions[index];
+		- if (!api.group)
+			- hasNoGroupAPI = true
+			- break;
+	
+	- if (hasNoGroupAPI)
+
+		- var hasGeneral = false;
+		- for (var index in groups)
+			- var group = groups[index];
+			- if (group.name == 'General')
+				- hasGeneral = true
+				- break;
+
+		- if (!hasGeneral)
+			-
+				groups.unshift({
+					name: 'General',
+					desc: ''
+				});
+
 
 mixin menu
 	div.ui.inverted.left.fixed.vertical.accordion.menu.mainmenu
@@ -36,6 +71,8 @@ mixin menu
 				div.sub.header API Documentation
 
 		a.item.blue.mainmenu.active(href='#introduction', data-tab='introduction') Introduction
+
+		+general
 
 		- for (var index in groups)
 			- var group = groups[index];

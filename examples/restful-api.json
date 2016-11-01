@@ -139,6 +139,63 @@
 			}
 		},
 		{
+			"name": "Create Video",
+			"desc": "Create a new video",
+			"group": "Video",
+			"api": "/apis/videos",
+			"method": "POST",
+			"params": {
+				"body": {
+					"name": {
+						"type": "String",
+						"desc": "Video name"
+					},
+					"desc": {
+						"type": "String",
+						"desc": "Video description"
+					}
+				}
+			},
+			"status": {
+				"Success": {
+					"code": 200,
+					"success": true,
+					"format": {
+						"id": {
+							"type": "String",
+							"desc": "Video unique ID"
+						},
+						"name": {
+							"type": "String",
+							"desc": "Video Name"
+						},
+						"desc": {
+							"type": "String",
+							"desc": "Video description"
+						}
+					},
+					"example": {
+						"id": "23TplPdS",
+						"name": "Pen Pineapple Apple Pen",
+						"desc": "What the fuck?"
+					}
+				},
+				"No Access Right": {
+					"code": 401,
+					"success": false,
+					"format": {
+						"message": {
+							"type": "String",
+							"desc": "Error Message"
+						}
+					},
+					"example": {
+						"message": "NoAccessRight"
+					}
+				}
+			}
+		},
+		{
 			"name": "Get Video",
 			"desc": "This endpoint retrieves all videos.",
 			"group": "Video",
@@ -147,7 +204,7 @@
 			"params": {
 				"url": {
 					"id": {
-						"type": "Number",
+						"type": "String",
 						"desc": "The ID of the video to retrieve"
 					}
 				}
@@ -175,6 +232,110 @@
 						"name": "Pen Pineapple Apple Pen",
 						"desc": "What the fuck?"
 					}
+				},
+				"Not Found": {
+					"code": 404,
+					"success": false,
+					"format": {
+						"message": {
+							"type": "String",
+							"desc": "Error Message"
+						}
+					},
+					"example": {
+						"message": "Video Not Found"
+					}
+				},
+				"No Access Right": {
+					"code": 401,
+					"success": false,
+					"format": {
+						"message": {
+							"type": "String",
+							"desc": "Error Message"
+						}
+					},
+					"example": {
+						"message": "NoAccessRight"
+					}
+				}
+			}
+		},
+		{
+			"name": "Update Video",
+			"desc": "Update video information",
+			"group": "Video",
+			"api": "/apis/video/:id",
+			"method": "PUT",
+			"params": {
+				"url": {
+					"id": {
+						"type": "String",
+						"desc": "The ID of the video to update"
+					}	
+				},
+				"body": {
+					"name": {
+						"type": "String",
+						"desc": "Video name"
+					},
+					"desc": {
+						"type": "String",
+						"desc": "Video description"
+					}
+				}
+			},
+			"status": {
+				"Success": {
+					"code": 200,
+					"success": true
+				},
+				"Not Found": {
+					"code": 404,
+					"success": false,
+					"format": {
+						"message": {
+							"type": "String",
+							"desc": "Error Message"
+						}
+					},
+					"example": {
+						"message": "Video Not Found"
+					}
+				},
+				"No Access Right": {
+					"code": 401,
+					"success": false,
+					"format": {
+						"message": {
+							"type": "String",
+							"desc": "Error Message"
+						}
+					},
+					"example": {
+						"message": "NoAccessRight"
+					}
+				}
+			}
+		},
+		{
+			"name": "Delete Video",
+			"desc": "Delete specific video",
+			"group": "Video",
+			"api": "/apis/video/:id",
+			"method": "DELETE",
+			"params": {
+				"url": {
+					"id": {
+						"type": "String",
+						"desc": "The ID of the video to delete"
+					}	
+				}
+			},
+			"status": {
+				"Success": {
+					"code": 200,
+					"success": true
 				},
 				"Not Found": {
 					"code": 404,
