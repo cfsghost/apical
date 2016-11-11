@@ -110,18 +110,20 @@
 							}
 						}
 					},
-					"example": [
-						{
-							"id": "23TplPdS",
-							"name": "Pen Pineapple Apple Pen",
-							"desc": "What the fuck?"
-						},
-						{
-							"id": "56SDflPzX",
-							"name": "Hackathon Taiwan",
-							"desc": "The biggest hackathon in Taiwan"
-						}
-					]
+					"example": {
+						videos: [
+							{
+								"id": "23TplPdS",
+								"name": "Pen Pineapple Apple Pen",
+								"desc": "What the fuck?"
+							},
+							{
+								"id": "56SDflPzX",
+								"name": "Hackathon Taiwan",
+								"desc": "The biggest hackathon in Taiwan"
+							}
+						]
+					}
 				},
 				"No Access Right": {
 					"code": 401,
